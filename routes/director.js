@@ -5,15 +5,14 @@ const mongoose = require('mongoose');
 // Models
 const Director = require('../models/Director');
 
-router.get('/directors', (req, res, next)=>{
-  const promise = Director.aggregate([
-    {
-        $lookup: {
-          from: 'movies',
-          localField: '_id',
-          foreignField: 'director_id',
-          as: 'movies'
-        }
+router.get('/directors', (req, res, next) => {
+  const promise = Director.aggregate([{
+      $lookup: {
+        from: 'movies',
+        localField: '_id',
+        foreignField: 'director_id',
+        as: 'movies'
+      }
     },
     {
       $unwind: {
@@ -30,7 +29,7 @@ router.get('/directors', (req, res, next)=>{
           bio: '$bio'
         },
         movies: {
-         $push: '$movies'
+          $push: '$movies'
         }
       }
     },
@@ -44,28 +43,27 @@ router.get('/directors', (req, res, next)=>{
       }
     }
 
-]);
-  promise.then((data)=>{
+  ]);
+  promise.then((data) => {
     res.json(data);
-  }).catch((err)=>{
+  }).catch((err) => {
     res.json(err);
   });
 });
 
-router.get('/directors/:director_id', (req, res)=>{
-  const promise = Director.aggregate([
-    {
+router.get('/directors/:director_id', (req, res) => {
+  const promise = Director.aggregate([{
       $match: {
         '_id': mongoose.Types.ObjectId(req.params.director_id)
       }
     },
     {
-        $lookup: {
-          from: 'movies',
-          localField: '_id',
-          foreignField: 'director_id',
-          as: 'movies'
-        }
+      $lookup: {
+        from: 'movies',
+        localField: '_id',
+        foreignField: 'director_id',
+        as: 'movies'
+      }
     },
     {
       $unwind: {
@@ -82,7 +80,7 @@ router.get('/directors/:director_id', (req, res)=>{
           bio: '$bio'
         },
         movies: {
-         $push: '$movies'
+          $push: '$movies'
         }
       }
     },
@@ -96,15 +94,50 @@ router.get('/directors/:director_id', (req, res)=>{
       }
     }
 
-]);
+  ]);
+  promise.then((data) => {
+    res.json(data);
+  }).catch((err) => {
+    res.json(err);
+  });
+});
+
+router.put('/directors/:director_id', (req, res, next) => {
+  const promise = Director.findByIdAndUpdate(req.params.director_id, req.body, {
+    new: true
+  });
+  promise.then((data) => {
+    if (!data)
+      next({
+        message: 'The director was mot found',
+        code: 99
+      });
+    res.json(data);
+  }).catch((err) => {
+    res.json(err);
+  });
+});
+
+router.delete('/directors/:director_id', (req, res, next)=>{
+  const promise = Director.findById(req.params.director_id);
   promise.then((data)=>{
+
+    if (!data)
+      next({
+        message: 'The movie was not found.',
+        code: 99
+      });
+
+    Director.remove({
+      _id: mongoose.Types.ObjectId(req.params.director_id)
+    }, (err, data) => {
+      console.log(err);
+    });
     res.json(data);
   }).catch((err)=>{
     res.json(err);
   });
 });
-
-
 
 
 
@@ -117,11 +150,11 @@ router.post('/directors', (req, res, next) => {
   const promise = director.save();
 
   promise.then((data) => {
-    res.json(data);
-  })
-  .catch((err) => {
-    res.json(err);
-  });
+      res.json(data);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
 });
 
 
