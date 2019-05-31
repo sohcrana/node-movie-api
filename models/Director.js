@@ -4,11 +4,15 @@ const Schema = mongoose.Schema;
 const DirectorSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    maxlength: [30, '{PATH} can\'t be longer than {MAXLENGTH} chars.'],
+    minlength: [2, '{PATH} can\'t be shorter than {MINLENGTH} chars.']
   },
   surname: {
     type: String,
-    required: true
+    required: true,
+    maxlength: [30, '{PATH} can\'t be longer than {MAXLENGTH} chars.'],
+    minlength: [2, '{PATH} can\'t be shorter than {MINLENGTH} chars.']
   },
   country: String,
   bio: String,

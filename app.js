@@ -9,6 +9,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const moviesRouter = require('./routes/movie');
 const directorsRouter = require('./routes/director');
+const userRouter = require('./routes/user');
 
 
 

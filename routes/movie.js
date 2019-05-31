@@ -6,8 +6,18 @@ const mongoose = require('mongoose');
 //Models
 const Movie = require('../models/Movie');
 
-router.get('/movies', (req, res) => {
-  const promise = Movie.find({});
+router.get('/movies', (req, res, next) => {
+  const promise = Movie.aggregate([
+    {
+      $lookup: {
+      from: 'directors',
+      localField: 'director_id',
+      foreignField: '_id',
+      as: 'director'
+    }},
+    {
+    $unwind: '$director'
+  }]);
   promise.then((data) => {
     res.json(data);
   }).catch((err) => {
