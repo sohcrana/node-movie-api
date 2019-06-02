@@ -11,7 +11,7 @@ const UserSchema = new Schema({
     type: String,
     required: [true, '{PATH} can\'t be empty.'],
     minlength: [6, '{PATH} can\'t be shorter than {MINLENGTH} chars.'],
-    maxlength: [24, '{PATH} can\'t be longer than {MAXLENGTH} chars.']
+    maxlength: [60, '{PATH} can\'t be longer than {MAXLENGTH} chars.']
   }
 });
 

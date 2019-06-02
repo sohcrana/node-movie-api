@@ -6,16 +6,21 @@ const logger = require('morgan');
 
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 const moviesRouter = require('./routes/movie');
 const directorsRouter = require('./routes/director');
-const userRouter = require('./routes/user');
+const usersRouter = require('./routes/user');
+
 
 
 
 const app = express();
 //db connection
 const db = require('./helper/db')();
+//config
+const config = require('./config');
+app.set('api_secret_key', config.api_secret_key);
+//middleware
+const verifyToken = require('./middleware/verify-token');
 
 // view engine setup
 app.engine("pug", require("pug").__express);
@@ -30,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/api', verifyToken);
 app.use('/api/movies', moviesRouter);
 app.use('/api/directors', directorsRouter);
 

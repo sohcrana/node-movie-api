@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 // Models
-const User = require('../model/User');
+const User = require('../models/User');
 
 /* GET users listing. */
 router.get('/', (req, res, next) => {
