@@ -5,7 +5,7 @@ const MovieSchema = new Schema({
   director_id: Schema.Types.ObjectId,
   title: {
     type: String,
-    unique: true,
+    //unique: true,
     required: [true, '{PATH} can\'t be empty.']
   },
   category: String,
