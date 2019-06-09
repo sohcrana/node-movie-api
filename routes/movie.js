@@ -54,7 +54,7 @@ router.get('/between/:start_year/:end_year', (req, res) => {
 });
 
 // ID bazlı movie endpoint'i
-router.get('/:movie_id', (req, res, next) => {
+router.get('/movies/:movie_id', (req, res, next) => {
   const promise = Movie.findById(req.params.movie_id);
   promise.then((movie) => {
     !movie ? next({
@@ -73,7 +73,7 @@ router.get('/:movie_id', (req, res, next) => {
 // });
 
 // ID bazlı update
-router.put('/:movie_id', (req, res, next) => {
+router.put('/movies/:movie_id', (req, res, next) => {
   const promise = Movie.findByIdAndUpdate(req.params.movie_id, req.body, {
     new: true
   });
@@ -88,7 +88,7 @@ router.put('/:movie_id', (req, res, next) => {
 });
 
 // ID bazlı silme
-router.delete('/:movie_id', (req, res, next) => {
+router.delete('/movies/:movie_id', (req, res, next) => {
   const promise = Movie.findById(req.params.movie_id);
   promise.then((movie) => {
     if (!movie)
@@ -102,7 +102,7 @@ router.delete('/:movie_id', (req, res, next) => {
     }, (err, data) => {
       console.log(err);
     });
-    res.json(movie);
+    res.json({status: 1});
   }).catch((err) => {
     res.json(err);
   });
@@ -120,9 +120,7 @@ router.post('/movies', (req, res, next) => {
 
   const promise = movie.save();
   promise.then((data) => {
-    res.json({
-      status: 1
-    });
+    res.json(data);
   }).catch((err) => {
     res.json(err);
   });
